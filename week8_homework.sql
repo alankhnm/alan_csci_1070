@@ -5,13 +5,13 @@ ADD COLUMN status VARCHAR(10);
 UPDATE rental
 SET status = 
     CASE 
-        WHEN rental.return_date > rental.rental_date + INTERVAL '1 day' * (
+        WHEN rental.return_date > rental.rental_date + (
             SELECT film.rental_duration 
             FROM film
             INNER JOIN inventory ON film.film_id = inventory.film_id 
             WHERE inventory.inventory_id = rental.inventory_id
         ) THEN 'Late'
-        WHEN rental.return_date < rental.rental_date + INTERVAL '1 day' * (
+        WHEN rental.return_date < rental.rental_date + (
             SELECT film.rental_duration 
             FROM film 
             INNER JOIN inventory ON film.film_id = inventory.film_id 
